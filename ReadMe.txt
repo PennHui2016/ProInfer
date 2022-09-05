@@ -1,3 +1,5 @@
+# ProInfer
+Protein inference tool
 The codes programmed with python 3.8.8.Required packages include:
 1. pandas
 2. numpy
@@ -7,6 +9,7 @@ The codes programmed with python 3.8.8.Required packages include:
 6. csv
 7. sys
 
+# Part 1 KNIME workflow for ProInfer
 ProInfer.py requires the iddentified peptides as input. To prepare the inputs, please
 use the attached KNIME workflow (file name: preparing_peptides_workflow.knwf).
 
@@ -73,6 +76,7 @@ Example 2: running the ProInfer_cpx:
 which equals to:
     python ProInfer.py ./DDA1.tsv 2 0.999 0.01 ./res/proinfer_out.csv ./res/proinfer_cpx_out  ./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta ./allComplexes.txt
 
+# Part 2 OpenMS for ProInfer
 OpenMS_ProInfer.py accepts MS data in .mzML format as input. OpenMS (https://www.openms.de/downloads/) and MSFragger (https://github.com/Nesvilab/MSFragger) is required
 to be installed. Parameters need to be specified including:
 1. openms: string, OpenMS installation path
