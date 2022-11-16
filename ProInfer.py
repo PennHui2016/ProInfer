@@ -6,6 +6,7 @@ import copy
 from scipy import stats
 import csv
 import sys
+import argparse
 
 def fdrsToQvals(fdrs):
   qvals = [0] * len(fdrs)
@@ -130,6 +131,9 @@ def accPEP_v1(dict_pro, dict_pep, proteins_info, decoy):
     label_pro = []
     gene_dict = {}
     for pro in dict_pro.keys():
+        print(pro)
+        if pro=='sp|P01891|1A68_HUMAN':
+            a=0
         pros.append(pro)
         peps = dict_pro[pro]
         score = 1
@@ -138,6 +142,13 @@ def accPEP_v1(dict_pro, dict_pep, proteins_info, decoy):
                 score *= dict_pro[pro][pep]
             elif len(dict_pep[pep]) > 1: # ambigious
                 pro_j = dict_pep[pep]
+                b = []
+                for pr in np.unique(pro_j):
+                    print(pr)
+                    if pr == 'sp|P01891|1A68_HUMAN':
+                        c = 0
+                    idx = np.where((proteins_info[:, 0] == pr))[0][0]
+                    b.append(proteins_info[:, 1][idx])
                 pro_j_len = [proteins_info[:, 1][np.where((proteins_info[:, 0] == pr))[0][0]] for pr in
                              np.unique(pro_j)]
                 pro_j_len = np.array(pro_j_len, dtype='float')
@@ -275,7 +286,7 @@ def main():
     parser = argparse.ArgumentParser(description='run ProInfer and ProInfer_cpx')
     parser.add_argument('-i', '--input', default='./DDA1.tsv',
                         help='input peptide list from percolator, can obtain with the attached KNIME workflow in [preparing_peptides_workflow.knwf]')
-    parser.add_argument('-t', '--run_type', type=int, default=1,
+    parser.add_argument('-t', '--run_type', type=int, default=2,
                         help='1 (default)--runs the ProInfer; 2--runs the ProInfer_cpx')
     parser.add_argument('-pt', '--psm_threshold', type=float, default=0.999,
                         help='Selection of posterior error probability (PEP) threshold ((0, 1], default 0.999) to filter low confidence peptides out.')
@@ -283,12 +294,16 @@ def main():
                         help='float (0, 1], default 0.01. Selection of False Discovery Rate (FDR) for reporting target proteins.')
     parser.add_argument('-sp','--save_path_proinfer', default='./res/proinfer_out.csv',
                         help='Indicate where to save the results from ProInfer')
-    parser.add_argument('-spc','--save_path_cpx',default='./res/proinfer_cpx_out',
+    parser.add_argument('-spc','--save_path_cpx',default='./res/proinfer_cpx_out.csv',
                         help='Indicate where to save the results from ProInfer')
     parser.add_argument('-db', '--protein_database', default='./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta',
                         help='Indicate the protein database for database search. Should be the same as what you used in the KNIME workflow')
     parser.add_argument('-cp', '--complex_path', default='./allComplexes.txt',
                         help='The protein complexes used by ProInfer_cpx. The default file is downloaded from CORUM 3.0 (http://mips.helmholtz-muenchen.de/corum/).')
+    parser.add_argument('-s', '--species', default='Human',
+                        help='species of the sample')
+    parser.add_argument('-d', '--decoy', default='rev',
+                        help='prefix of the decoy proteins')
     args = parser.parse_args()
 
     per_pep_path = args.input # all_params[1]
@@ -299,12 +314,14 @@ def main():
     save_path_cpx = args.save_path_cpx # all_params[6]
     protein_database = args.protein_database # all_params[7]
     complex_path = args.complex_path # all_params[8]
+    decoy = args.decoy
+    species = args.species
 
     if run_type == 1:  # only run ProInfer
-        ProInfer_v1(per_pep_path, psm_threshold, protein_database, save_path_proinfer)
+        ProInfer_v1(per_pep_path, psm_threshold, protein_database, save_path_proinfer, decoy)
     elif run_type == 2:  # run both ProInfer and ProInfer_cpx
         ProInfer_cpx_v2(per_pep_path, save_path_proinfer, save_path_cpx, psm_threshold, pro_qvalue_td, protein_database,
-                        complex_path)
+                        complex_path, species, decoy)
 
 if __name__ == '__main__':
     # toy data Hela DDA1 with PSM pp>0.001
