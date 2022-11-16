@@ -3,11 +3,12 @@ import numpy as np
 import random
 import os
 import copy
-import ProInfer_core_v3
+import ProInfer
 import re
 import glob
 import csv
 import sys
+import argparse
 
 def get_para_string(params):
     paraString = ''
@@ -255,7 +256,7 @@ def percolator_protein(openms_path, in_file, psm_threshold, pro_qvalue_td, decoy
 
     return per_out
 
-def dbs_pi(openms_path, msfragger_path, in_file, database):
+def dbs_pi(openms_path, msfragger_path, in_file, database, score_type):
     params_frag = {
         '-tolerance:precursor_mass_tolerance_lower': 10,
         '-tolerance:precursor_mass_tolerance_upper': 10,
@@ -303,7 +304,7 @@ def dbs_pi(openms_path, msfragger_path, in_file, database):
     out_file_percolator = in_file_percolator.replace('_PSMFea',
                                                      '_percolator')  # 'F:/NTU/proteomics/ProInfer_codes/test_res/CAP1_percolator.idXML'
     para_percolator = {
-        '-score_type': peroolator_score_type
+        '-score_type': score_type
     }
     Percolator(openms_path, in_file_percolator, out_file_percolator, para_percolator)
 
@@ -316,19 +317,19 @@ def dbs_pi(openms_path, msfragger_path, in_file, database):
                                                       '_proinfer.tsv')  # 'F:/NTU/proteomics/ProInfer_codes/test_res/CAP1_proinfer.tsv'
 
     idXML2tsv(openms_path, in_file_tsv, out_percolator_tsv_proinfer, psms_proinfer_para)
-    for file_name in listdir('./'):
-        if file_name.endswith('.idXML'):
-            os.remove(folder_path + file_name)
+    # for file_name in listdir('./'):
+    #     if file_name.endswith('.idXML'):
+    #         os.remove(folder_path + file_name)
     return out_percolator_tsv_proinfer
 
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='run ProInfer and ProInfer_cpx')
-    parser.add_argument('-e', '--openms', default='./openMS/OpenMS-2.7.0/bin/',
+    parser.add_argument('-e', '--openms', default='D:/openMS/OpenMS-2.7.0/bin/', #default='./openMS/OpenMS-2.7.0/bin/',
                         help='provide the installation path of OpenMS, e.g., C:/Users/xxx/Documents/openMS/OpenMS-2.7.0/bin/')
-    parser.add_argument('-f', '--msfragger', default='./FragPipe-17.1/fragpipe/tools/MSFragger-3.4/MSFragger-3.4.jar',
+    parser.add_argument('-f', '--msfragger', default='./FragPipe-17.1/fragpipe/tools/MSFragger-3.4/MSFragger-3.4.jar', #default='D:/proteomics/2021.11.10/MSFragger-3.4/MSFragger-3.4.jar',
                         help='provide the installation path of MSFragger for database search, e.g., C:/Users/xxx/Documents/FragPipe-17.1/fragpipe/tools/MSFragger-3.4/MSFragger-3.4.jar')
-    parser.add_argument('-i', '--input', default='./HeLa_TechReps_Exp1_DDA_1.mzML',
+    parser.add_argument('-i', '--input', default='./HeLa_TechReps_Exp1_DDA_1.mzML', # default='F:/NTU/quantification/Hela/test/HeLa_TechReps_Exp1_DDA_1.mzML',
                         help='input .mzML file for database search and peptide identification, raw file can be coverted to .mzML with MSConvert')
     parser.add_argument('-t', '--run_type', type=int, default=1,
                         help='1 (default)--runs the ProInfer; 2--runs the ProInfer_cpx')
@@ -338,9 +339,9 @@ def main():
                         help='float (0, 1], default 0.01. Selection of False Discovery Rate (FDR) for reporting target proteins.')
     parser.add_argument('-sp','--save_path_proinfer', default='./res/proinfer_out.csv',
                         help='Indicate where to save the results from ProInfer')
-    parser.add_argument('-spc','--save_path_cpx',default='./res/proinfer_cpx_out',
+    parser.add_argument('-spc','--save_path_cpx', default='./res/proinfer_cpx_out',
                         help='Indicate where to save the results from ProInfer')
-    parser.add_argument('-db', '--protein_database', default='./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta',
+    parser.add_argument('-db', '--protein_database', default='./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta', #default='D:/proteomics/maus1/revision_v2/2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta',#
                         help='Indicate the protein database for database search.')
     parser.add_argument('-cp', '--complex_path', default='./allComplexes.txt',
                         help='The protein complexes used by ProInfer_cpx. The default file is downloaded from CORUM 3.0 (http://mips.helmholtz-muenchen.de/corum/).')
@@ -363,14 +364,17 @@ def main():
     save_path_cpx = args.save_path_cpx
     protein_database = args.protein_database
     complex_path = args.complex_path
+    decoy = args.decoy
+    species = args.species
+    score_type = args.score_type
 
-    per_pep_path = dbs_pi(openms_path, msfragger_path, input_file, protein_database)
+    per_pep_path = dbs_pi(openms_path, msfragger_path, input_file, protein_database, score_type)
 
 
     if run_type == 1:  # only run ProInfer v1 (without complex info)
-        ProInfer.ProInfer_v1(per_pep_path, psm_threshold, protein_database, save_path_proinfer)
+        ProInfer.ProInfer_v1(per_pep_path, psm_threshold, protein_database, save_path_proinfer, decoy)
     elif run_type == 2:  # run both ProInfer v1 and v2 (with complex info)
         ProInfer.ProInfer_cpx_v2(per_pep_path, save_path_proinfer, save_path_cpx, psm_threshold, pro_qvalue_td, protein_database,
-                        complex_path)
+                        complex_path, species, decoy)
 if __name__ == '__main__':
     main()
