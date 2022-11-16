@@ -13,7 +13,7 @@ The codes programmed with python 3.8.8.Required packages include:
 ProInfer.py requires the iddentified peptides as input. To prepare the inputs, please
 use the attached KNIME workflow (file name: preparing_peptides_workflow.knwf).
 
-There are 8 required inputs:
+There are 10 required inputs:
 
 1. per_pep_path: String, required. 
                  The path of the file containing input peptide list, can obtain with 
@@ -44,6 +44,12 @@ There are 8 required inputs:
                  The protein complexes used by ProInfer_cpx. The default file is downloaded
 				 from CORUM 3.0 (http://mips.helmholtz-muenchen.de/corum/).
 				 
+9. species: String, default 'Human'.
+	    Indicate which species does the sample come from
+
+10. decoy: String, default 'rev'
+	   Indicate the prefix of protein ID for decoy proteins
+				 
 The outputs from ProInfer are stored in .csv file. There are 5 columns, including 
 Protein IDs (column 1), accPEP scores (column 2), confidence score (column 3),
 q-values (column 4), proteins labels, 1 -- target; -1 -- decoy (column 5).
@@ -60,21 +66,21 @@ checking parameters:
     python ProInfer.py -h
 
 The tool can be run in following command:
-    python ProInfer.py [per_pep_path] [run_type] [psm_threshold] [pro_qvalue_td] [save_path_proinfer] [save_path_cpx] [protein_database] [complex_path]
-
+    python ProInfer.py -i [per_pep_path] -t [run_type] -pt [psm_threshold] -qt [pro_qvalue_td] -sp [save_path_proinfer] -spc [save_path_cpx] -db [protein_database] -cp [complex_path] -s [species] -d [decoy]
+    
 Example runnings with the toy data './DDA1.tsv':
 
 Example 1: running the ProInfer:
-     python ProInfer.py ./DDA1.tsv
+     python ProInfer.py -i ./DDA1.tsv
 
 which equals to:
-    python ProInfer.py ./DDA1.tsv 1 0.999 0.01 ./res/proinfer_out.csv ""  ./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta ""
+    python ProInfer.py -i ./DDA1.tsv -t 1 -pt 0.999 -qt 0.01 -sp ./res/proinfer_out.csv -spc "" -db ./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta -cp "" -s Human -d rev
 
 Example 2: running the ProInfer_cpx:
-     python ProInfer.py ./DDA1.tsv 2
+     python ProInfer.py -i ./DDA1.tsv -t 2
 
 which equals to:
-    python ProInfer.py ./DDA1.tsv 2 0.999 0.01 ./res/proinfer_out.csv ./res/proinfer_cpx_out  ./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta ./allComplexes.txt
+    python ProInfer.py -i ./DDA1.tsv -t 2 -pt 0.999 -qt 0.01 -sp ./res/proinfer_out.csv -spc ./res/proinfer_cpx_out -db ./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta -cp ./allComplexes.txt -s Human -d rev 
 
 # Part 2 OpenMS for ProInfer
 OpenMS_ProInfer.py accepts MS data in .mzML format as input. OpenMS (https://www.openms.de/downloads/) and MSFragger (https://github.com/Nesvilab/MSFragger) is required
