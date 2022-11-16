@@ -8,6 +8,8 @@ The codes programmed with python 3.8.8.Required packages include:
 5. copy
 6. csv
 7. sys
+8. argparse
+9. scipy
 
 # Part 1 KNIME workflow for ProInfer
 ProInfer.py requires the iddentified peptides as input. To prepare the inputs, please
