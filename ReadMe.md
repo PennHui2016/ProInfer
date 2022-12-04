@@ -72,23 +72,29 @@ q-values (column 11), ..., the last group of accPEP scores, confidence score, q-
 please use them for reporting proteins.
 
 checking parameters:
+    
     python ProInfer.py -h
 
 The tool can be run in following command:
+    
     python ProInfer.py -i [per_pep_path] -t [run_type] -pt [psm_threshold] -qt [pro_qvalue_td] -sp [save_path_proinfer] -spc [save_path_cpx] -db [protein_database] -cp [complex_path] -s [species] -d [decoy]
     
 Example runnings with the toy data './DDA1.tsv':
 
 Example 1: running the ProInfer:
+     
      python ProInfer.py -i ./DDA1.tsv
 
 which equals to:
+    
     python ProInfer.py -i ./DDA1.tsv -t 1 -pt 0.999 -qt 0.01 -sp ./res/proinfer_out.csv -spc "" -db ./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta -cp "" -s Human -d rev
 
 Example 2: running the ProInfer_cpx:
+     
      python ProInfer.py -i ./DDA1.tsv -t 2
 
 which equals to:
+    
     python ProInfer.py -i ./DDA1.tsv -t 2 -pt 0.999 -qt 0.01 -sp ./res/proinfer_out.csv -spc ./res/proinfer_cpx_out -db ./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta -cp ./allComplexes.txt -s Human -d rev 
 
 # Part 3 OpenMS for ProInfer
