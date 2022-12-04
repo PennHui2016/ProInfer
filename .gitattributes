@@ -1,0 +1,1 @@
+stand_alone.zip filter=lfs diff=lfs merge=lfs -text
