@@ -10,8 +10,15 @@ The codes programmed with python 3.8.8.Required packages include:
 7. sys
 8. argparse
 9. scipy
+10. tkinter
+11. PIL
 
-# Part 1 KNIME workflow for ProInfer
+# Part 1 Stand-alone version ProInfer
+We built a stand-alone version application ProInfer_tk, One can download the ProInfer_tk.exe file from https://drive.google.com/file/d/12bZik0qaXEDxmWNOlWh9nRKAbF1ZR5ET/view?usp=sharing (ProInfer.exe is too big to upload to GitHub) or run ProInfer_tk.py with Python via following simple command:
+
+	python ProInfer_tk.py
+
+# Part 2 KNIME workflow for ProInfer
 ProInfer.py requires the iddentified peptides as input. To prepare the inputs, please
 use the attached KNIME workflow (file name: preparing_peptides_workflow.knwf).
 
@@ -84,7 +91,7 @@ Example 2: running the ProInfer_cpx:
 which equals to:
     python ProInfer.py -i ./DDA1.tsv -t 2 -pt 0.999 -qt 0.01 -sp ./res/proinfer_out.csv -spc ./res/proinfer_cpx_out -db ./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta -cp ./allComplexes.txt -s Human -d rev 
 
-# Part 2 OpenMS for ProInfer
+# Part 3 OpenMS for ProInfer
 OpenMS_ProInfer.py accepts MS data in .mzML format as input. OpenMS (https://www.openms.de/downloads/) and MSFragger (https://github.com/Nesvilab/MSFragger) is required
 to be installed. Parameters need to be specified including:
 1. openms: string, OpenMS installation path
