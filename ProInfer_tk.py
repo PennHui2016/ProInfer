@@ -26,7 +26,7 @@ class initface():
     def __init__(self, master):
         self.master = master
         self.master.config(bg='white')
-        # 基准界面initface
+        # initface
         self.menubar = tk.Menu(self.master,)
         self.filemenu = tk.Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label='tools', menu=self.filemenu)
