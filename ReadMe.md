@@ -14,7 +14,7 @@ The codes programmed with python 3.8.8.Required packages include:
 11. PIL
 
 # Part 1 Stand-alone version ProInfer
-We built a stand-alone version application ProInfer_tk, One can download the ProInfer_tk.exe file from https://drive.google.com/file/d/12bZik0qaXEDxmWNOlWh9nRKAbF1ZR5ET/view?usp=sharing (ProInfer.exe is too big to upload to GitHub) or run ProInfer_tk.py with Python via following simple command:
+We built a stand-alone version application ProInfer_tk, One can download the ProInfer_tk.exe file from https://drive.google.com/file/d/1GL3rXXADYKhjprHYwhGZ41_J-ThhsDOX/view?usp=sharing (ProInfer.exe is too big to upload to GitHub) or run ProInfer_tk.py with Python via following simple command:
 
 	python ProInfer_tk.py
 
