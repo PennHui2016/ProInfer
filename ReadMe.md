@@ -1,6 +1,9 @@
 # ProInfer
-Protein inference tool
-The codes programmed with python 3.8.8.Required packages include:
+ProInfer is a protein inference tool.
+
+If peptide identification results from percolator is already avaliable, then using ProInfer, otherwise, using OpenMS_ProInfer 
+
+The ProInfer codes programmed with python 3.8.8.Required packages include:
 1. pandas
 2. numpy
 3. random
@@ -13,12 +16,7 @@ The codes programmed with python 3.8.8.Required packages include:
 10. tkinter
 11. PIL
 
-# Part 1 Stand-alone version ProInfer
-We built a stand-alone version application ProInfer_tk, One can download the ProInfer_tk.exe file from https://drive.google.com/file/d/1GL3rXXADYKhjprHYwhGZ41_J-ThhsDOX/view?usp=sharing (ProInfer.exe is too big to upload to GitHub) or run ProInfer_tk.py with Python via following simple command:
-
-	python ProInfer_tk.py
-
-# Part 2 KNIME workflow for ProInfer
+# Part 1 KNIME workflow for ProInfer
 ProInfer.py requires the iddentified peptides as input. To prepare the inputs, please
 use the attached KNIME workflow (file name: preparing_peptides_workflow.knwf).
 
@@ -97,7 +95,7 @@ which equals to:
     
     python ProInfer.py -i ./DDA1.tsv -t 2 -pt 0.999 -qt 0.01 -sp ./res/proinfer_out.csv -spc ./res/proinfer_cpx_out -db ./2022-06-23-decoys-contam-uniprot-proteome_UP000005640_2022_5_5.fasta -cp ./allComplexes.txt -s Human -d rev 
 
-# Part 3 OpenMS for ProInfer
+# Part 2 OpenMS for ProInfer
 OpenMS_ProInfer.py accepts MS data in .mzML format as input. OpenMS (https://www.openms.de/downloads/) and MSFragger (https://github.com/Nesvilab/MSFragger) is required
 to be installed. Parameters need to be specified including:
 1. openms: string, OpenMS installation path
@@ -137,6 +135,12 @@ to be installed. Parameters need to be specified including:
 checking parameters:
     python OpenMS_ProInfer.py -h
 			
+# Part 3 Stand-alone version ProInfer
+We built a stand-alone version application ProInfer_tk, One can download the ProInfer_tk.exe file from https://drive.google.com/file/d/1GL3rXXADYKhjprHYwhGZ41_J-ThhsDOX/view?usp=sharing (ProInfer.exe is too big to upload to GitHub) or run ProInfer_tk.py with Python via following simple command:
+
+	python ProInfer_tk.py
+	
+If OpenMS_ProInfer is used, please install OpenMS and MSFragger at first (see above part 2)
 
 Any problems or requesting source codes for reproducing results in our paper please contact 
     Hui Peng: hui.peng@ntu.edu.sg
